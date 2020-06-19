@@ -1,0 +1,100 @@
+_format_version: '1.1'
+services:
+- host: lhcr1
+  created_at: 1578871225
+  connect_timeout: 60000
+  id: fe8e5ce1-c0a5-4712-b07d-56e996694a8c
+  protocol: http
+  name: HapiJPA
+  read_timeout: 60000
+  port: 8080
+  path: /hapi-fhir-jpaserver/fhir/
+  updated_at: 1591448785
+  retries: 5
+  write_timeout: 60000
+routes:
+- id: 285760ae-08fd-4814-b5cd-cb3e28ba86a1
+  updated_at: 1591448854
+  protocols:
+  - http
+  - https
+  created_at: 1591448854
+  service: fe8e5ce1-c0a5-4712-b07d-56e996694a8c
+  name: metadata
+  preserve_host: false
+  regex_priority: 0
+  strip_path: true
+  paths:
+  - /fhir/metadata
+  https_redirect_status_code: 426
+- id: a4726cab-f489-40ec-b83d-10f52a96998a
+  updated_at: 1591448433
+  protocols:
+  - http
+  - https
+  created_at: 1578871242
+  service: fe8e5ce1-c0a5-4712-b07d-56e996694a8c
+  name: fhir
+  preserve_host: false
+  regex_priority: 0
+  strip_path: true
+  paths:
+  - /fhir
+  https_redirect_status_code: 426
+plugins:
+- created_at: 1578871686
+  config:
+    response_type: code
+    bearer_only: 'no'
+    ssl_verify: 'no'
+    realm: kong
+    redirect_after_logout_uri: /
+    scope: openid
+    token_endpoint_auth_method: client_secret_post
+    client_secret: b2c55a04-3ac4-4545-bb0c-da063b9e4a9e
+    client_id: kong
+    logout_path: /fhir/logout
+    discovery: http://lhcr1:8081/auth/realms/lhcr1/.well-known/openid-configuration
+  id: 11156427-b8b5-414b-95a1-baabcaef459b
+  name: oidc
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+  enabled: true
+  run_on: first
+  route: a4726cab-f489-40ec-b83d-10f52a96998a
+- created_at: 1591450192
+  config:
+    remove:
+      querystring: {}
+      headers: {}
+      body: {}
+    replace:
+      querystring: {}
+      headers: {}
+      uri: /hapi-fhir-jpaserver/fhir/metadata
+      body: {}
+    add:
+      querystring: {}
+      headers: {}
+      body: {}
+    append:
+      querystring: {}
+      headers: {}
+      body: {}
+    rename:
+      querystring: {}
+      headers: {}
+      body: {}
+  id: 135c9ee6-bb20-45e7-a2dd-ec0eb55119fa
+  name: request-transformer
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+  enabled: true
+  run_on: first
+  route: 285760ae-08fd-4814-b5cd-cb3e28ba86a1
