@@ -58,6 +58,8 @@
       }
     ],
     "client": {
+      "testviewer": [],
+      "lhcr1_testviewer": [],
       "realm-management": [
         {
           "id": "c3dc55af-3f90-479c-a12b-3e693cfc642e",
@@ -270,8 +272,8 @@
           "attributes": {}
         }
       ],
-      "lhcr1": [],
       "security-admin-console": [],
+      "lhcr1_keycloak": [],
       "admin-cli": [],
       "broker": [
         {
@@ -284,7 +286,6 @@
           "attributes": {}
         }
       ],
-      "pyflask": [],
       "account": [
         {
           "id": "f71bb213-646d-4fb0-8240-ca2b9cab1603",
@@ -579,7 +580,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "clients": "[\"pyflask\"]"
+              "clients": "[\"lhcr1_testviewer\"]"
             }
           },
           {
@@ -630,7 +631,7 @@
     },
     {
       "id": "a8e16e3b-522b-40c4-9e63-2f647a276734",
-      "clientId": "pyflask",
+      "clientId": "testviewer",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
@@ -767,13 +768,66 @@
     },
     {
       "id": "a0c35f8b-6a1d-499f-92ce-e3abdfe0f61d",
-      "clientId": "lhcr1",
+      "clientId": "lhcr1_keycloak",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
         "http://localhost:8081/auth/realms/lhcr1/broker/lhcr2oidc/endpoint"
+      ],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "false",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "6de35759-339f-4019-8828-b945cdb928b7",
+      "clientId": "lhcr1_testviewer",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -1353,7 +1407,7 @@
         "userInfoUrl": "http://lhcr1:8081/auth/realms/lhcr1/protocol/openid-connect/userinfo",
         "validateSignature": "false",
         "acceptsPromptNoneForwardFromClient": "",
-        "clientId": "lhcr2",
+        "clientId": "lhcr2_keycloak",
         "tokenUrl": "http://lhcr1:8081/auth/realms/lhcr1/protocol/openid-connect/token",
         "uiLocales": "",
         "jwksUrl": "http://lhcr1:8081/auth/realms/lhcr1/protocol/openid-connect/certs",
@@ -1366,6 +1420,17 @@
         "disableUserInfo": "",
         "logoutUrl": "http://lhcr1:8081/auth/realms/lhcr1/protocol/openid-connect/logout",
         "clientSecret": "**********"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "id": "0bb62469-ee7f-418f-82a5-60960a0c19e4",
+      "name": "Name mapper",
+      "identityProviderAlias": "lhcr1oidc",
+      "identityProviderMapper": "oidc-username-idp-mapper",
+      "config": {
+        "template": "${ALIAS}.${CLAIM.sub}"
       }
     }
   ],

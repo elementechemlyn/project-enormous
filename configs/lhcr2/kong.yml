@@ -1,6 +1,18 @@
 _format_version: '1.1'
 services:
-- host: lhcr2
+- host: lhcr2-viewer
+  created_at: 1592755704
+  connect_timeout: 60000
+  id: 69831792-ec6b-4987-ab60-33507eb43775
+  protocol: http
+  name: FHIRViewer
+  read_timeout: 60000
+  port: 9090
+  updated_at: 1592757124
+  retries: 5
+  write_timeout: 60000
+  tags: {}
+- host: lhcr2-fhirserver
   created_at: 1578871225
   connect_timeout: 60000
   id: fe8e5ce1-c0a5-4712-b07d-56e996694a8c
@@ -9,12 +21,12 @@ services:
   read_timeout: 60000
   port: 8080
   path: /hapi-fhir-jpaserver/fhir/
-  updated_at: 1591448785
+  updated_at: 1592757016
   retries: 5
   write_timeout: 60000
 routes:
 - id: 285760ae-08fd-4814-b5cd-cb3e28ba86a1
-  updated_at: 1591448854
+  updated_at: 1591451237
   protocols:
   - http
   - https
@@ -28,7 +40,7 @@ routes:
   - /fhir/metadata
   https_redirect_status_code: 426
 - id: a4726cab-f489-40ec-b83d-10f52a96998a
-  updated_at: 1591448433
+  updated_at: 1591451237
   protocols:
   - http
   - https
@@ -41,12 +53,28 @@ routes:
   paths:
   - /fhir
   https_redirect_status_code: 426
+- id: ddbf8147-a10f-4cc7-88d8-2497a517b051
+  updated_at: 1592755771
+  protocols:
+  - http
+  - https
+  created_at: 1592755771
+  service: 69831792-ec6b-4987-ab60-33507eb43775
+  name: Viewer
+  preserve_host: false
+  regex_priority: 0
+  strip_path: true
+  paths:
+  - /viewer
+  https_redirect_status_code: 426
 plugins:
 - created_at: 1578871686
   config:
     response_type: code
+    introspection_endpoint: http://lhcr2:8082/auth/realms/lhcr2/protocol/openid-connect/token/introspect
     bearer_only: 'no'
     ssl_verify: 'no'
+    introspection_endpoint_auth_method: client_secret_post
     realm: kong
     redirect_after_logout_uri: /
     scope: openid
@@ -54,7 +82,7 @@ plugins:
     client_secret: b2c55a04-3ac4-4545-bb0c-da063b9e4a9e
     client_id: kong
     logout_path: /fhir/logout
-    discovery: http://lhcr2:8081/auth/realms/lhcr1/.well-known/openid-configuration
+    discovery: http://lhcr2:8082/auth/realms/lhcr2/.well-known/openid-configuration
   id: 11156427-b8b5-414b-95a1-baabcaef459b
   name: oidc
   protocols:
@@ -98,3 +126,4 @@ plugins:
   enabled: true
   run_on: first
   route: 285760ae-08fd-4814-b5cd-cb3e28ba86a1
+  

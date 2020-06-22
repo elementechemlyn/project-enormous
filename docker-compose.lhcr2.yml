@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-    lhcr2_keycloak:
+    lhcr2-keycloak:
         ports:
             - '${LHCR2_KEYCLOAK_PORT}:8080'
         environment:
@@ -18,7 +18,7 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
     
-    lhcr2_kong-db:
+    lhcr2-kong-db:
         image: postgres${KONG_DB_TAG}
         ports:
             - ${LHCR2_KONG_DB_PORT}:5432
@@ -32,7 +32,7 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
     
-    lhcr2_kong:
+    lhcr2-kong:
         image: lhcr/kong-oidc
         ports:
             - ${LHCR2_KONG_PORT}:8000
@@ -41,7 +41,7 @@ services:
             - ${LHCR2_KONG_SECURE_ADMIN_PORT}:8444
         environment:
             KONG_DATABASE:    postgres
-            KONG_PG_HOST:     lhcr2_kong-db
+            KONG_PG_HOST:     lhcr2-kong-db
             KONG_PG_DATABASE: ${LHCR2_KONG_DB_NAME}
             KONG_PG_USER:     ${LHCR2_KONG_DB_USER}
             KONG_PG_PASSWORD: ${LHCR2_KONG_DB_PW}
@@ -60,7 +60,22 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
         depends_on:
-            - lhcr2_kong-db
-
+            - lhcr2-kong-db
+    lhcr2-fhirserver:
+        image: elementech/fhirjpa
+        build:
+            context: ./jpa_fhir_server
+            dockerfile: Dockerfile
+        volumes:
+            - ./configs/lhcr2/hapi.properties.server:/tmp/hapi.properties
+        environment:
+            - "JAVA_OPTS=-Dhapi.properties=/tmp/hapi.properties"
+        networks: 
+            - lhcr2
+        extra_hosts:
+            - lhcr2:${IP}
+            - lhcr1:${IP}
+        
+        
 networks:
     lhcr2:

@@ -1,8 +1,6 @@
 """
-bin/standalone.sh -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=keycloak-export.json -Djboss.http.port=8888 -Djboss.https.port=9999 -Djboss.management.http.port=7777
-
-docker run -p 8082:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -e KEYCLOAK_IMPORT=/tmp/lhcr1.json -v "$(pwd)"/lhcr2-keycloak-export.json:/tmp/lhcr1.json jboss/keycloak -Dkeycloak.profile.feature.token_exchange=enabled -Dkeycloak.profile.feature.admin_fine_grained_authz=enabled
-
+An example of the testviewer client from lhcr2 authenticating a user and then
+exchanging the users token for a toke minted at lhcr1
 """
 from keycloak import KeycloakAdmin, KeycloakOpenID
 from keycloak.exceptions import raise_error_from_response, KeycloakGetError
@@ -34,7 +32,7 @@ def exchange_token( oidc_obj, token):
 
 SERVER_URL = "http://192.168.0.36:8082/auth/"
 REALM_NAME = "lhcr2"
-CLIENT_ID = "pyflask"
+CLIENT_ID = "testviewer"
 CLIENT_SECRET = "5244c131-ae37-4b37-a015-c4d1e587034a"
 #Get a token from lhcr2
 lhcr2oidc = KeycloakOpenID(server_url=SERVER_URL,
@@ -48,7 +46,7 @@ print(lhcr2token)
 #Exchange it for a token from lhcr1
 SERVER2_URL = "http://192.168.0.36:8081/auth/"
 REALM2_NAME = "lhcr1"
-CLIENT2_ID = "pyflask_lhcr2"
+CLIENT2_ID = "lhcr2_testviewer"
 CLIENT2_SECRET = "a4d8acc4-48ba-46fe-a46a-99a7bf6bb8fe"
 
 lhcr1oidc = KeycloakOpenID(server_url=SERVER2_URL,

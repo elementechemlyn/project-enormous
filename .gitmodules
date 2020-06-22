@@ -1,0 +1,3 @@
+[submodule "jpa_fhir_server"]
+	path = jpa_fhir_server
+	url = git@github.com:elementechemlyn/jpa_fhir_server

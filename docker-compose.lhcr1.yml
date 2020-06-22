@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-    lhcr1_keycloak:
+    lhcr1-keycloak:
         ports:
             - '${LHCR1_KEYCLOAK_PORT}:8080'
         environment:
@@ -11,7 +11,7 @@ services:
             
         volumes:
             - ./configs/lhcr1/keycloak-export.json:/tmp/lhcrrealm.json
-        command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.token_exchange=enabled", "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"]
+        command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.upload_scripts=enabled","-Dkeycloak.profile.feature.token_exchange=enabled", "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"]
         image: jboss/keycloak${KEYCLOAK_TAG}
         networks: 
             - lhcr1
@@ -19,7 +19,7 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
 
-    lhcr1_kong-db:
+    lhcr1-kong-db:
         image: postgres${KONG_DB_TAG}
         ports:
             - ${LHCR1_KONG_DB_PORT}:5432
@@ -33,7 +33,7 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
 
-    lhcr1_kong:
+    lhcr1-kong:
         image: lhcr/kong-oidc
         ports:
             - ${LHCR1_KONG_PORT}:8000
@@ -42,7 +42,7 @@ services:
             - ${LHCR1_KONG_SECURE_ADMIN_PORT}:8444
         environment:
             KONG_DATABASE:    postgres
-            KONG_PG_HOST:     lhcr1_kong-db
+            KONG_PG_HOST:     lhcr1-kong-db
             KONG_PG_DATABASE: ${LHCR1_KONG_DB_NAME}
             KONG_PG_USER:     ${LHCR1_KONG_DB_USER}
             KONG_PG_PASSWORD: ${LHCR1_KONG_DB_PW}
@@ -61,7 +61,18 @@ services:
             - lhcr2:${IP}
             - lhcr1:${IP}
         depends_on:
-            - lhcr1_kong-db
+            - lhcr1-kong-db
+
+    lhcr1-fhirserver:
+        image: elementech/fhirjpa
+        build:
+            context: ./jpa_fhir_server
+            dockerfile: Dockerfile
+        networks: 
+            - lhcr1
+        extra_hosts:
+            - lhcr2:${IP}
+            - lhcr1:${IP}
 
 networks:
     lhcr1:
