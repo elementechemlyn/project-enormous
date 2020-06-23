@@ -2,7 +2,7 @@
 
 ## LHCR one
 
-| Service | Docker Host | Docker Port | Local Port|
+| Service | Docker Host | Docker Port | Host Port|
 |---------|-------------|-------------|-----------|
 | Keycloak Backend | lhcr1-keycloak | 8080 | N/A|
 | Keycloak Frontend | lhcr1-keycloak | 8081 | 8081|  
@@ -18,7 +18,7 @@
 
 ### LHCR two
 
-| Service | Docker Host | Docker Port | Local Port|
+| Service | Docker Host | Docker Port | Host Port|
 |---------|-------------|-------------|-----------|
 | Keycloak Backend | lhcr2-keycloak | 8080 | N/A| 
 | Keycloak Frontend | lhcr2-keycloak | 8081 | 8082| 

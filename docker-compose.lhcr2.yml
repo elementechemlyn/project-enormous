@@ -75,7 +75,20 @@ services:
         extra_hosts:
             - lhcr2:${IP}
             - lhcr1:${IP}
-        
+    lhcr2-testviewer:
+        image: elementech/testviewer
+        build:
+            context: ./fhir_tester
+            dockerfile: Dockerfile
+        networks: 
+            - lhcr2
+        extra_hosts:
+            - lhcr2:${IP}
+            - lhcr1:${IP}
+        volumes:
+            - ./configs/lhcr2/viewer.application.properties:/tmp/application.properties
+        environment:
+            SPRING_CONFIG_LOCATION: file:/tmp/application.properties           
         
 networks:
     lhcr2:

@@ -1,3 +1,6 @@
 [submodule "jpa_fhir_server"]
 	path = jpa_fhir_server
 	url = git@github.com:elementechemlyn/jpa_fhir_server
+[submodule "fhir_tester"]
+	path = fhir_tester
+	url = git@github.com:elementechemlyn/fhir_tester.git
