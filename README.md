@@ -34,8 +34,16 @@
 
 ## Kong Proxy Paths
 | Service | Path | Auth
-|-----|-----|
+|-----|-----|----|
 | FHIR Server | /fhir | OAUTH Introspection or OIDC with encrypted cookie
+| OpenTest NEMS** | /nems | None/Pass-through
+| OpenTest MESH API** | /meshapi | None/Pass-through
+| OpenTest SMSP** | /smsp | None/Pass-through
+| OpenTest GPConnect 0.x| /gpconnect0  | None/Pass-through
+| OpenTest GPConnect 1.x| /gpconnect1  | None/Pass-through
+
+
+** LHCR1 Only
 
 ## Keycloak users
 

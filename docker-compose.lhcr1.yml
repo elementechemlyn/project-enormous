@@ -1,5 +1,69 @@
 version: '3.3'
 services:
+    lhcr1_spine:
+        image: dperson/openvpn-client
+        # cap_add, security_opt, and volume required for the image to function
+        cap_add:
+          - net_admin
+        environment:
+          TZ: 'UTC'
+        networks:
+          - lhcr1
+        # if using '-d' or 'DNS' you can't enable the `read_only: true` option
+        read_only: true
+        tmpfs:
+          - /run
+          - /tmp
+        security_opt:
+          - label:disable
+        stdin_open: true
+        tty: true
+        volumes:
+          - /dev/net:/dev/net:z
+          - ./configs/opentest:/vpn
+        # command: 'server;user;password[;port]'
+        ports:
+            - ${LHCR1_KONG_PORT}:8000
+            - ${LHCR1_KONG_SECURE_PORT}:8443
+            - ${LHCR1_KONG_ADMIN_PORT}:8001
+            - ${LHCR1_KONG_SECURE_ADMIN_PORT}:8444
+
+    lhcr1-kong:
+        image: lhcr/kong-oidc
+        #Un-comment this section if you don't run the openvpn/spine container.
+        #ports:
+        #    - ${LHCR1_KONG_PORT}:8000
+        #    - ${LHCR1_KONG_SECURE_PORT}:8443
+        #    - ${LHCR1_KONG_ADMIN_PORT}:8001
+        #    - ${LHCR1_KONG_SECURE_ADMIN_PORT}:8444
+        environment:
+            KONG_DATABASE:    postgres
+            KONG_PG_HOST:     lhcr1-kong-db
+            KONG_PG_DATABASE: ${LHCR1_KONG_DB_NAME}
+            KONG_PG_USER:     ${LHCR1_KONG_DB_USER}
+            KONG_PG_PASSWORD: ${LHCR1_KONG_DB_PW}
+            KONG_ADMIN_LISTEN: 0.0.0.0:${LHCR1_KONG_HTTP_ADMIN_PORT}
+            KONG_PROXY_LISTEN: 0.0.0.0:${LHCR1_KONG_HTTP_PROXY_PORT}
+            KONG_PROXY_ACCESS_LOG: /dev/stdout
+            KONG_ADMIN_ACCESS_LOG: /dev/stdout
+            KONG_PROXY_ERROR_LOG:  /dev/stderr
+            KONG_ADMIN_ERROR_LOG:  /dev/stderr
+            KONG_PLUGINS: bundled,oidc
+        volumes:
+            - ./configs/lhcr1/kong.yml:/tmp/kong.yml
+        #Comment this section if you don't run the openvpn/spine container
+        network_mode: "service:lhcr1_spine" 
+        #Un-comment this section if you don't run the openvpn/spine container.
+        #networks: 
+        #    - lhcr1
+        #extra_hosts:
+        #    - lhcr2:${IP}
+        #    - lhcr1:${IP}
+        depends_on:
+            - lhcr1-kong-db
+
+        
+
     lhcr1-keycloak:
         ports:
             - '${LHCR1_KEYCLOAK_PORT}:8080'
@@ -32,36 +96,6 @@ services:
         extra_hosts:
             - lhcr2:${IP}
             - lhcr1:${IP}
-
-    lhcr1-kong:
-        image: lhcr/kong-oidc
-        ports:
-            - ${LHCR1_KONG_PORT}:8000
-            - ${LHCR1_KONG_SECURE_PORT}:8443
-            - ${LHCR1_KONG_ADMIN_PORT}:8001
-            - ${LHCR1_KONG_SECURE_ADMIN_PORT}:8444
-        environment:
-            KONG_DATABASE:    postgres
-            KONG_PG_HOST:     lhcr1-kong-db
-            KONG_PG_DATABASE: ${LHCR1_KONG_DB_NAME}
-            KONG_PG_USER:     ${LHCR1_KONG_DB_USER}
-            KONG_PG_PASSWORD: ${LHCR1_KONG_DB_PW}
-            KONG_ADMIN_LISTEN: 0.0.0.0:${LHCR1_KONG_HTTP_ADMIN_PORT}
-            KONG_PROXY_LISTEN: 0.0.0.0:${LHCR1_KONG_HTTP_PROXY_PORT}
-            KONG_PROXY_ACCESS_LOG: /dev/stdout
-            KONG_ADMIN_ACCESS_LOG: /dev/stdout
-            KONG_PROXY_ERROR_LOG:  /dev/stderr
-            KONG_ADMIN_ERROR_LOG:  /dev/stderr
-            KONG_PLUGINS: bundled,oidc
-        volumes:
-            - ./configs/lhcr1/kong.yml:/tmp/kong.yml
-        networks: 
-            - lhcr1
-        extra_hosts:
-            - lhcr2:${IP}
-            - lhcr1:${IP}
-        depends_on:
-            - lhcr1-kong-db
 
     lhcr1-fhirserver:
         image: elementech/fhirjpa
