@@ -153,5 +153,3 @@ subscription.websocket.enabled=false
 oauth.token.name=X-Access-Token
 oauth.token.prefix=
 oauth.whitelist=http://lhcr2:8082/auth/realms/lhcr2
-
-

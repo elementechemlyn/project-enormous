@@ -16,9 +16,13 @@
     docker build --build-arg KONG_BASE_TAG=${KONG_BASE_TAG} -t lhcr/kong-oidc .
     docker-compose -f docker-compose.lhcr2.yml up -d lhcr2-kong-db
     docker-compose -f docker-compose.lhcr1.yml up -d lhcr1-kong-db
+    docker-compose -f docker-compose.lhcr1.yml up -d lhcr1-keycloak
+    docker-compose -f docker-compose.lhcr2.yml up -d lhcr2-keycloak
   )
   _wait_for_listener localhost:${LHCR2_KONG_DB_PORT}
   _wait_for_listener localhost:${LHCR1_KONG_DB_PORT}
+  _wait_for_endpoint localhost:${LHCR1_KEYCLOAK_PORT}
+  _wait_for_endpoint localhost:${LHCR2_KEYCLOAK_PORT}
 
   (set -x
     docker-compose -f docker-compose.lhcr2.yml run --rm lhcr2-kong kong migrations bootstrap

@@ -12,7 +12,7 @@
 | Kong Secure Admin | lhcr1-kong | 8444 | 8444 |
 | Postgres   | lhcr1-kong-db | 5432 | 6431|
 | FHIR Server| lhcr1-fhirserver | 8080 | N/A** |
-| FHIR Viewer | lhcr1-viewer | 9090 | N/A** |
+| FHIR Viewer | lhcr1-viewer | 9090 | 9090 |
 
 ** Service accesed via Kong
 
@@ -28,15 +28,14 @@
 | Kong Secure Admin | lhcr2-kong | 8444 | 8446 |
 | Postgres   | lhcr2-kong-db | 5432 | 6432 |
 | FHIR Server| lhcr2-fhirserver | 8080 | N/A** |
-| FHIR Viewer | lhcr2-viewer | 9090 | N/A** |
+| FHIR Viewer | lhcr2-viewer | 9090 | 9091 |
 
 ** Service accesed via Kong
 
 ## Kong Proxy Paths
-| Service | Path |
+| Service | Path | Auth
 |-----|-----|
-| FHIR Server | /fhir |
-| FHIR Test UI| /viewer |
+| FHIR Server | /fhir | OAUTH Introspection or OIDC with encrypted cookie
 
 ## Keycloak users
 

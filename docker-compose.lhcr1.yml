@@ -79,8 +79,10 @@ services:
         build:
             context: ./fhir_tester
             dockerfile: Dockerfile
+        ports:
+            - 9090:9090
         networks: 
-            - lhcr1
+        - lhcr1
         extra_hosts:
             - lhcr2:${IP}
             - lhcr1:${IP}
