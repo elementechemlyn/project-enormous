@@ -1,3 +1,45 @@
+# Project Enormous
+
+An NHS Ecosystem and LHCR development environment.
+
+Project enormous is a set of docker containers providing two environments configured to provide easy demonstration and development of a number of NHS and LHCR technologies.
+
+Each of the 2 LHCR environments provides:
+
+* A HAPI FHIR Server configured with Open ID Connect and Smart on FHIR Scope support.
+* A FHIR test viewer based on the HAPI FHIR Test overlay. It allows viewing of data in OIDC protected FHIR servers and the use OAUTH Token exchange to view data from other FHIR servers.
+* A Kong API Gateway configured to provide access to the FHIR Server APIs and to proxy requests to services in the NHS OpenTest environment.
+* A Keycloak server configured to support OAUTH Token Exchange and simple use of FHIR Smart Scopes. 
+
+
+## Prerequisites
+
+All services used in the images are built using docker build chains so the only requirements to run the environment are:
+
+* Docker and docker-compose installed an working
+* To use the OpenTest proxy you must have an account for OpenTest. The OpenVPN configuration file should be copied to:  
+
+    `configs/opentest/`
+
+* The hosts `lhcr1` and `lhcr2` added to your local hosts file and mapped to localhost:
+
+```
+127.0.0.1 lhcr1
+127.0.0.1 lhcr2
+```
+
+## Starting the environment
+
+Before running he build script you need to set the environment variable IP to the ip address of the local machine - this is used by the docker containers so must be the host ip not the local ip. e.g:
+
+`export IP=192.168.0.30`
+
+This varaible is used to set up the hosts in the docker containers.
+
+To start both lhcr1 and lhcr2 run the script: `build-env.sh`
+To start lhcr1 run the script: `build-lhcr1.sh`
+To start lhcr2 only, run the script: `build-lhcr2.sh`
+
 ## Network Details 
 
 ## LHCR one
@@ -41,6 +83,7 @@
 | OpenTest SMSP** | /smsp | None/Pass-through
 | OpenTest GPConnect 0.x| /gpconnect0  | None/Pass-through
 | OpenTest GPConnect 1.x| /gpconnect1  | None/Pass-through
+| OpenTest Spine Security Proxy| /spinesp  | None/Pass-through
 
 
 ** LHCR1 Only
