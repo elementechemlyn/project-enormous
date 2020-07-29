@@ -11,6 +11,7 @@ Each of the 2 LHCR environments provides:
 * A Kong API Gateway configured to provide access to the FHIR Server APIs and to proxy requests to services in the NHS OpenTest environment.
 * A Keycloak server configured to support OAUTH Token Exchange and simple use of FHIR Smart Scopes. 
 
+![Architecture](./enormous.svg)
 
 ## Prerequisites
 
