@@ -7,7 +7,7 @@ Project enormous is a set of docker containers providing two environments config
 Each of the 2 LHCR environments provides:
 
 * A HAPI FHIR Server configured with Open ID Connect and Smart on FHIR Scope support.
-* A FHIR test viewer based on the HAPI FHIR Test overlay. It allows viewing of data in OIDC protected FHIR servers and the use OAUTH Token exchange to view data from other FHIR servers.
+* A FHIR test viewer based on the HAPI FHIR Test overlay. It allows viewing of data in OIDC protected FHIR servers and the use OAUTH [Token Exchange](TokenExchange.md) to view data from other FHIR servers.
 * A Kong API Gateway configured to provide access to the FHIR Server APIs and to proxy requests to services in the NHS OpenTest environment.
 * A Keycloak server configured to support OAUTH Token Exchange and simple use of FHIR Smart Scopes. 
 
