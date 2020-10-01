@@ -15,7 +15,7 @@ Within ProjectEnormous the flow is as follows:
 | Step | Description | Diagram Step
 |---------|-------------|-------------|
 | Attempt Login to LHCR2 | Navigate to the LHCR2 Viewer at http://lhcr2:9990. You will be redirected to the LHCR2 Keycloak login page. Attempt login with username: user1 and password user1. Login will fail as user1 does not exist in LHCR2 | N/A |
-| Access to LHCR1 viewer | Navigate to the LHCR2 Viewer at http://lhcr1:9990. You will be redirected to the LHCR1 Keycloak login page. | 1 |
+| Access to LHCR1 viewer | Navigate to the LHCR1 Viewer at http://lhcr1:9990. You will be redirected to the LHCR1 Keycloak login page. | 1 |
 | Authenticate to LHCR1 | Login with username: user1 and password: user1. | 2 |
 | Access LHCR1 data | Use the viewer to access data held in the LHCR1 FHIR server. The API server validates the token with the LHCR1 Keycloak instance. | 3 and 4 |
 | View the LHCR1 Token | In the top right "About" menu you can select "View token". This is the decoded token issued by the LHCR1 Keycloak | N/A |
