@@ -13,6 +13,6 @@ python-jose==3.1.0
 python-keycloak==0.20.0
 PyYAML==5.3.1
 requests==2.24.0
-rsa==4.6
+rsa==4.7
 six==1.15.0
 urllib3==1.25.9
