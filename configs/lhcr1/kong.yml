@@ -233,7 +233,6 @@ plugins:
   - http
   - https
   enabled: true
-  run_on: first
   route: a4726cab-f489-40ec-b83d-10f52a96998a
 - created_at: 1591450192
   config:
@@ -266,5 +265,4 @@ plugins:
   - http
   - https
   enabled: true
-  run_on: first
   route: 285760ae-08fd-4814-b5cd-cb3e28ba86a1
